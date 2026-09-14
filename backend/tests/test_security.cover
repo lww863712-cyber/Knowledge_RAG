@@ -1,0 +1,14 @@
+    1: from app.core.security import create_access_token, decode_access_token, hash_password, verify_password
+       
+       
+    3: def test_password_hash_and_verify() -> None:
+    1:     hashed = hash_password("secret123")
+    1:     assert hashed != "secret123"
+    1:     assert verify_password("secret123", hashed) is True
+    1:     assert verify_password("wrong-password", hashed) is False
+       
+       
+    3: def test_jwt_roundtrip() -> None:
+    1:     token = create_access_token("42")
+    1:     payload = decode_access_token(token)
+    1:     assert payload["sub"] == "42"

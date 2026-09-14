@@ -1,0 +1,29 @@
+    1: from datetime import datetime
+       
+    1: from pydantic import BaseModel, Field
+       
+       
+   10: class LoginRequest(BaseModel):
+    3:     username: str = Field(min_length=1, max_length=64)
+    3:     password: str = Field(min_length=1, max_length=128)
+       
+       
+   10: class TokenResponse(BaseModel):
+    2:     access_token: str
+    3:     token_type: str = "bearer"
+       
+       
+   12: class UserCreate(BaseModel):
+    3:     username: str = Field(min_length=1, max_length=64)
+    3:     password: str = Field(min_length=6, max_length=128)
+    3:     role: str = Field(default="user", pattern="^(admin|user)$")
+       
+       
+   16: class UserOut(BaseModel):
+    2:     id: int
+    2:     username: str
+    2:     role: str
+    2:     is_active: bool
+    2:     created_at: datetime
+       
+    1:     model_config = {"from_attributes": True}

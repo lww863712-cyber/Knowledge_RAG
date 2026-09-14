@@ -1,0 +1,21 @@
+    1: from app.rag.parser.parser import ParsedSection
+    1: from app.rag.splitter.splitter import split_sections
+       
+       
+    3: def test_split_long_text() -> None:
+    1:     sections = [ParsedSection(text="段落A" * 50 + "\n\n" + "段落B" * 50, metadata={"filename": "a.md"})]
+       
+    1:     chunks = split_sections(sections, file_type="md", chunk_size=60, overlap=10)
+       
+    1:     assert len(chunks) > 1
+    8:     assert all(chunk.content for chunk in chunks)
+       
+       
+    3: def test_split_code_keeps_lines() -> None:
+   21:     lines = [f"line_{index} = {index}" for index in range(20)]
+    1:     sections = [ParsedSection(text="\n".join(lines), metadata={"filename": "app.py"})]
+       
+    1:     chunks = split_sections(sections, file_type="py", chunk_size=60)
+       
+    1:     assert chunks
+    1:     assert "line_0 = 0" in chunks[0].content

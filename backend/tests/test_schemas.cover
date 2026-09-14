@@ -1,0 +1,14 @@
+    1: import pytest
+    1: from pydantic import ValidationError
+       
+    1: from app.schemas.auth import LoginRequest, UserCreate
+       
+       
+    3: def test_login_request_valid() -> None:
+    1:     payload = LoginRequest(username="admin", password="admin123")
+    1:     assert payload.username == "admin"
+       
+       
+    3: def test_user_create_rejects_invalid_role() -> None:
+    2:     with pytest.raises(ValidationError):
+    1:         UserCreate(username="user1", password="123456", role="superadmin")

@@ -1,0 +1,10 @@
+    1: import tempfile
+    1: from pathlib import Path
+       
+    1: import pytest
+       
+       
+    2: @pytest.fixture
+    4: def temp_dir() -> Path:
+    6:     with tempfile.TemporaryDirectory(dir=".") as directory:
+    3:         yield Path(directory)

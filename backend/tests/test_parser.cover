@@ -1,0 +1,33 @@
+    1: from pathlib import Path
+       
+    1: from app.rag.parser.parser import parse_file
+       
+       
+    3: def test_parse_markdown_file(temp_dir: Path) -> None:
+    1:     file = temp_dir / "note.md"
+    1:     file.write_text("# 标题\n\n这是笔记内容。", encoding="utf-8")
+       
+    1:     sections = parse_file(str(file), "md")
+       
+    1:     assert len(sections) == 1
+    1:     assert "这是笔记内容" in sections[0].text
+    1:     assert sections[0].metadata["filename"] == "note.md"
+       
+       
+    3: def test_parse_json_preserves_hierarchy(temp_dir: Path) -> None:
+    1:     file = temp_dir / "data.json"
+    1:     file.write_text('{"a": {"b": 1}}', encoding="utf-8")
+       
+    1:     sections = parse_file(str(file), "json")
+       
+    1:     assert sections[0].metadata["format"] == "json"
+    1:     assert "$.a.b: 1" in sections[0].text
+       
+       
+    3: def test_parse_txt_falls_back_for_plain_text(temp_dir: Path) -> None:
+    1:     file = temp_dir / "plain.txt"
+    1:     file.write_text("plain text content", encoding="utf-8")
+       
+    1:     sections = parse_file(str(file), "txt")
+       
+    1:     assert sections[0].text == "plain text content"

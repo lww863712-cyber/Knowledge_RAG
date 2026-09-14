@@ -1,0 +1,41 @@
+    1: from functools import lru_cache
+       
+    1: from pydantic_settings import BaseSettings, SettingsConfigDict
+       
+       
+   46: class Settings(BaseSettings):
+    3:     app_name: str = "one_RAG"
+    3:     secret_key: str = "change-me"
+    3:     access_token_expire_minutes: int = 1440
+    3:     default_admin_username: str = "admin"
+    3:     default_admin_password: str = "admin123"
+       
+    3:     database_url: str = "postgresql+asyncpg://rag:rag_password@localhost:5432/rag"
+    3:     qdrant_url: str = "http://localhost:6333"
+    3:     file_storage_dir: str = "./data/files"
+    3:     cors_origins: str = "http://localhost:5173,http://localhost:8080"
+       
+    3:     llm_provider: str = "deepseek"
+    3:     llm_api_key: str = ""
+    3:     llm_base_url: str = ""
+    3:     llm_model: str = ""
+    3:     llm_temperature: float = 0.2
+       
+    3:     embedding_provider: str = "local"
+    3:     embedding_model: str = "BAAI/bge-m3"
+    3:     embedding_use_int8: bool = False
+    3:     cloud_embedding_model: str = ""
+    3:     cloud_embedding_api_key: str = ""
+       
+    3:     reranker_model: str = "BAAI/bge-reranker-v2-m3"
+       
+    1:     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+       
+    2:     @property
+    2:     def cors_origin_list(self) -> list[str]:
+               return [item.strip() for item in self.cors_origins.split(",") if item.strip()]
+       
+       
+    2: @lru_cache
+    2: def get_settings() -> Settings:
+    1:     return Settings()
